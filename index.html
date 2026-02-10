@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MedEstudiaSaludable</title>
+<style>
+  body{font-family:Arial, sans-serif;background:#f4fdfd;margin:0;color:#333}
+  header{background:#4db6ac;color:#fff;text-align:center;padding:20px}
+  header img{max-height:250px;margin-bottom:10px}
+  nav{background:#e0f2f1;text-align:center;padding:10px}
+  nav button{margin:6px 10px;padding:8px 14px;background:#00796b;color:#fff;
+             border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+  nav button:hover{background:#005c50}
+  section{padding:18px;display:none}
+  h2{border-bottom:2px solid #4db6ac;padding-bottom:4px;margin-top:0}
+  .card{background:#fff;margin:12px 0;padding:16px;border-radius:8px;
+        box-shadow:0 2px 4px rgba(0,0,0,0.1);cursor:pointer;transition:0.3s}
+  .card.flip{background:#c8e6c9;color:#004d40}
+  .front,.back{display:block}
+  .back{display:none}
+  footer{background:#004d40;color:#fff;text-align:center;padding:10px}
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</style>
+</head>
+<body>
+
+<header>
+  <img src="images/logo_MedEstudiaSaludable.png" alt="Logo"/>
+  <h1>MedEstudiaSaludable</h1>
+  <p id="fraseMotivadora" style="font-style: italic; color: #004d40; margin-top: 10px;"></p>
+  <p>Estudia medicina sin perderte a ti mismo</p>
+</header>
+
+<!-- MENSAJE DE BIENVENIDA -->
+<div style="background:#fffde7;padding:16px;margin:16px;border-left:5px solid #fbc02d">
+  <h3>🧠✨ ¡Bienvenid@ a MedEstudiaSaludable!</h3>
+  <p>Aquí combinamos estudio médico con bienestar mental.<br>
+  Cada día recibirás flashcards, tips de concentración y recordatorios para cuidar de ti mientras te preparas.</p>
+  <p>🧘‍♀️ Respira profundo antes de estudiar. Tu mente también merece cuidado.</p>
+  <p>💚 ¡Comparte con quien estudia medicina sin dejarse a un lado!</p>
+<!-- ENLACE A TELEGRAM -->
+<div style="text-align:center;margin:20px">
+  <a href="https://t.me/medEstudiaSaludable" target="_blank"
+     style="display:inline-block;background:#0088cc;color:#fff;
+            padding:12px 20px;border-radius:8px;text-decoration:none;
+            font-weight:bold;font-size:16px">
+    👉 Únete al canal de Telegram: @MedEstudiaSaludable
+  </a>
+</div>
+
+
+<nav>
+  <button onclick="toggleSection('pediatria')">Pediatría</button>
+  <button onclick="toggleSection('ginecologia')">Ginecología</button>
+  <button onclick="toggleSection('cardiologia')">Cardiología</button>
+  <button onclick="toggleSection('infecciosas')">Infecciosas</button>
+  <button onclick="toggleSection('saludmental')">Salud Mental</button>
+  <button onclick="mostrarSeccion('tecnicasEstudio')">Técnicas de Estudio</button>
+  <button onclick="mostrarSeccion('autocuidado')">Autocuidado</button>
+</nav>
+
+<section id="tecnicasEstudio">
+    <h2>🧠 Técnicas de Estudio</h2>
+
+  <div class="card">
+    <h3>Método Pomodoro 🍅</h3>
+    <p>Estudia 25 minutos, descansa 5. Cada 4 ciclos toma un descanso más largo. Mejora la concentración y evita el agotamiento mental.</p>
+  </div>
+
+  <div class="card">
+    <h3>Método Feynman ✍️</h3>
+    <p>Explica el tema como si se lo enseñaras a alguien sin conocimientos. Te obliga a entender, no solo memorizar.</p>
+  </div>
+
+  <div class="card">
+    <h3>Flashcards 🔁</h3>
+    <p>Usa tarjetas de repaso espaciado (como Anki) para fortalecer la memoria a largo plazo. Ideal para MIR, ENARM o exámenes clínicos.</p>
+  </div>
+
+  <div class="card">
+    <h3>Mapa Mental 🧩</h3>
+    <p>Visualiza los temas interconectados. Perfecto para integrar fisiología, patología y tratamiento en una sola imagen mental.</p>
+  </div>
+</section>
+
+
+
+<div style="background:#e0f2f1;padding:12px;border-left:4px solid #00796b">
+  🧘‍♂️ <strong>Tip del día:</strong> Haz 5 respiraciones profundas antes de estudiar.
+</div>
+
+<section id="pediatria">
+  <h2>Pediatría</h2>
+  <div class="card" onclick="flip(this)">
+    <span class="front">🟥 Sarampión: ¿cuáles son sus 4 pródromos + lesión oral típica?</span>
+    <span class="back">Fiebre, tos, rinitis, conjuntivitis + manchas de Koplik.</span>
+  </div>
+  <div class="card" onclick="flip(this)">
+    <span class="front">🌡️ Fiebre sin foco en RN: ¿qué patologías descartar primero?</span>
+    <span class="back">Sepsis neonatal, ITU, meningitis bacteriana.</span>
+  </div>
+</section>
+
+<section id="ginecologia">
+  <h2>Ginecología</h2>
+  <div class="card" onclick="flip(this)">
+    <span class="front">🔴 EPI: tríada clásica de síntomas.</span>
+    <span class="back">Dolor abdominal bajo, leucorrea/purulencia cervical, fiebre.</span>
+  </div>
+</section>
+
+<section id="cardiologia">
+  <h2>Cardiología</h2>
+  <div class="card" onclick="flip(this)">
+    <span class="front">🫀 CIA típica: hallazgo en la auscultación.</span>
+    <span class="back">Desdoblamiento fijo del segundo ruido.</span>
+  </div>
+</section>
+
+<section id="infecciosas">
+  <h2>Infecciosas</h2>
+  <div class="card" onclick="flip(this)">
+    <span class="front">🧫 TBC: síntoma cardinal que define sospecha en >2 s.</span>
+    <span class="back">Tos mayor de 2 semanas.</span>
+  </div>
+</section>
+
+<section id="saludmental">
+  <h2>Salud Mental</h2>
+  <div class="card" onclick="flip(this)">
+    <span class="front">💡 Técnica Pomodoro: pasos básicos.</span>
+    <span class="back">25 min estudio + 5 min pausa; repetir 4 veces y descanso largo.</span>
+  </div>
+</section>
+
+<section id="autocuidado">
+  <h2>💚 Autocuidado para estudiantes</h2>
+  <div class="card">
+    <h3>Respiración consciente 🧘‍♀️</h3>
+    <p>Haz una pausa de 1 minuto. Inhala 4 segundos, retén 4, exhala 4. Repite 4 veces. Calma tu sistema nervioso.</p>
+  </div>
+  <!-- (puedes agregar más aquí...) -->
+</section>
+
+<footer>
+  © 2025 MedEstudiaSaludable | Proyecto educativo y de bienestar<br/>
+  👉 <a href="https://t.me/medEstudiaSaludable" target="_blank" style="color:#fff;text-decoration:underline">
+    Canal de Telegram
+  </a>
+</footer>
+
+
+<script>
+  function toggleSection(id){
+    document.querySelectorAll('section').forEach(sec=>{
+      if(sec.id===id){
+        sec.style.display = (sec.style.display==='block') ? 'none' : 'block';
+        window.scrollTo({top:sec.offsetTop-60,behavior:'smooth'});
+      }else{
+        sec.style.display='none';
+      }
+    });
+  }
+  function flip(card){
+    card.classList.toggle('flip');
+    const front = card.querySelector('.front');
+    const back  = card.querySelector('.back');
+    if(back.style.display==='none'){
+      back.style.display='block';
+      front.style.display='none';
+    }else{
+      back.style.display='none';
+      front.style.display='block';
+    }
+  }
+function mostrarSeccion(id) {
+  document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
+</script>
+
+<script>
+  const frases = [
+    "🌱 Estudiar sin salud mental es rendirse a largo plazo.",
+    "🧘 Respira, lo estás haciendo bien.",
+    "💡 Aprende despacio, retén para siempre.",
+    "📚 Tu esfuerzo de hoy es el conocimiento de mañana.",
+    "💚 Cuida tu mente mientras cuidas tu vocación.",
+    "🧠 Una mente descansada aprende mejor.",
+    "⏳ Poco a poco se construye un gran médico.",
+    "🔥 Cada flashcard es un paso más cerca de tu meta.",
+    "🎯 Enfócate, pero no te olvides de ti.",
+    "✨ Estudiar es importante, tú también lo eres."
+  ];
+  const randomFrase = frases[Math.floor(Math.random() * frases.length)];
+  document.getElementById("fraseMotivadora").textContent = randomFrase;
+</script>
+
+</body>
+</html>
