@@ -60,6 +60,27 @@
   <button onclick="showSection('tecnicasEstudio')">Técnicas de Estudio</button>
 </nav>
 
+<div id="studyMode" style="display:none; padding:20px; text-align:center;">
+  <h2>📚 Modo Estudio</h2>
+  <div id="counter" style="margin-bottom:10px; font-weight:bold;"></div>
+
+  <div id="studyCard" class="card" onclick="flip(this)" style="max-width:600px; margin:0 auto;">
+    <span class="front"></span>
+    <span class="back" style="display:none;"></span>
+  </div>
+
+  <div style="margin-top:15px;">
+    <button onclick="nextCard()" style="padding:10px 16px; margin:5px;">➡️ Siguiente</button>
+    <button onclick="exitStudyMode()" style="padding:10px 16px; margin:5px;">❌ Salir</button>
+  </div>
+</div>
+
+<div style="text-align:center; margin:10px;">
+  <button onclick="startStudyMode()" style="padding:10px 16px; background:#ff9800; color:#fff; border:none; border-radius:6px; font-weight:bold;">
+    📖 Modo Estudio
+  </button>
+</div>
+  
 <section id="tecnicasEstudio">
     <h2>🧠 Técnicas de Estudio</h2>
 
@@ -921,6 +942,65 @@ const frases = [
 
 document.getElementById("fraseMotivadora").textContent =
   frases[Math.floor(Math.random() * frases.length)];
+</script>
+
+  <script>
+let allCards = [];
+let currentIndex = 0;
+
+function startStudyMode(){
+  // Recolectar todas las tarjetas del sitio
+  allCards = Array.from(document.querySelectorAll(".card"))
+    .filter(c => c.querySelector(".front") && c.querySelector(".back"));
+
+  if(allCards.length === 0){
+    alert("No hay tarjetas para estudiar.");
+    return;
+  }
+
+  // Ocultar secciones normales
+  document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
+
+  // Mostrar modo estudio
+  document.getElementById("studyMode").style.display = "block";
+
+  currentIndex = 0;
+  showStudyCard();
+}
+
+function showStudyCard(){
+  const card = allCards[currentIndex];
+  const frontText = card.querySelector(".front").innerHTML;
+  const backText  = card.querySelector(".back").innerHTML;
+
+  const studyCard = document.getElementById("studyCard");
+  studyCard.classList.remove("flip");
+
+  const front = studyCard.querySelector(".front");
+  const back  = studyCard.querySelector(".back");
+
+  front.innerHTML = frontText;
+  back.innerHTML = backText;
+  back.style.display = "none";
+  front.style.display = "block";
+
+  // Actualizar contador
+  document.getElementById("counter").textContent =
+    "Tarjeta " + (currentIndex + 1) + " de " + allCards.length;
+}
+
+function nextCard(){
+  currentIndex++;
+  if(currentIndex >= allCards.length){
+    currentIndex = 0; // vuelve al inicio
+  }
+  showStudyCard();
+}
+
+function exitStudyMode(){
+  document.getElementById("studyMode").style.display = "none";
+  // Volver a mostrar la primera sección o dejar todo oculto
+}
 </script>
 
 </body>
