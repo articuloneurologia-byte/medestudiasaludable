@@ -6,26 +6,101 @@
 <title>MedEstudiaSaludable</title>
 
 <style>
-  body{font-family:Arial, sans-serif;background:#f4fdfd;margin:0;color:#333}
-  header{background:#ffffff;color:#004d40;text-align:center;padding:20px;border-bottom:2px solid #e0f2f1}
-  header img{max-height:300px;margin-bottom:10px}
-  nav{background:#e0f2f1;text-align:center;padding:10px;position:sticky;top:0;z-index:1000}
-  nav button{margin:6px 10px;padding:8px 14px;background:#00796b;color:#fff;
-             border:none;border-radius:6px;font-weight:bold;cursor:pointer}
-  nav button:hover{background:#005c50}
-  section{padding:18px;display:none;animation: fadeIn 0.4s ease}
-  h2{border-bottom:2px solid #4db6ac;padding-bottom:4px;margin-top:0}
-  .card{background:#fff;margin:12px 0;padding:16px;border-radius:8px;
-        box-shadow:0 2px 4px rgba(0,0,0,0.1);cursor:pointer;transition:0.3s}
-  .card.flip{background:#c8e6c9;color:#004d40}
-  .front,.back{display:block}
-  .back{display:none}
-  footer{background:#004d40;color:#fff;text-align:center;padding:10px}
+body{font-family:Arial, sans-serif;background:#f4fdfd;margin:0;color:#333}
+header{background:#ffffff;color:#004d40;text-align:center;padding:20px;border-bottom:2px solid #e0f2f1}
+header img{max-height:300px;margin-bottom:10px}
+nav{background:#e0f2f1;text-align:center;padding:10px;position:sticky;top:0;z-index:1000}
+nav button{margin:6px 10px;padding:8px 14px;background:#00796b;color:#fff;
+           border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+nav button:hover{background:#005c50}
+section{padding:18px;display:none;animation: fadeIn 0.4s ease}
+h2{border-bottom:2px solid #4db6ac;padding-bottom:4px;margin-top:0}
+.card{background:#fff;margin:12px 0;padding:16px;border-radius:8px;
+      box-shadow:0 2px 4px rgba(0,0,0,0.1);cursor:pointer;transition:0.3s}
+.card.flip{background:#c8e6c9;color:#004d40}
+.front,.back{display:block}
+.back{display:none}
+footer{background:#004d40;color:#fff;text-align:center;padding:10px}
 
-  @keyframes fadeIn{
-    from {opacity:0; transform: translateY(10px);}
-    to {opacity:1; transform: translateY(0);}
-  }
+@keyframes fadeIn{
+  from {opacity:0; transform: translateY(10px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/* ===== MODO ESTUDIO CENTRADO ===== */
+#studyMode{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(244,253,253,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.study-container{
+  background: #ffffff;
+  width: 90%;
+  max-width: 700px;
+  min-height: 320px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.study-title{
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #004d40;
+}
+
+#counter{
+  margin: 10px 0;
+  font-weight: bold;
+  color: #00796b;
+}
+
+#studyCard{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  line-height: 1.4;
+  padding: 20px;
+  border-radius: 14px;
+  background: #f9ffff;
+  box-shadow: inset 0 0 0 2px #e0f2f1;
+}
+
+#studyCard .front,
+#studyCard .back{
+  font-weight: 600;
+}
+
+.study-buttons{
+  margin-top: 20px;
+}
+
+.study-buttons button{
+  padding: 12px 20px;
+  margin: 6px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.study-next{ background:#2196f3; color:white; }
+.study-shuffle{ background:#9e9e9e; color:white; }
+.study-exit{ background:#e53935; color:white; }
 </style>
 </head>
 <body>
@@ -60,21 +135,26 @@
   <button onclick="showSection('tecnicasEstudio')">Técnicas de Estudio</button>
 </nav>
 
-<div id="studyMode" style="display:none; padding:20px; text-align:center;">
-  <h2>📚 Modo Estudio</h2>
-  <div id="counter" style="margin-bottom:10px; font-weight:bold;"></div>
+<div id="studyMode">
+  <div class="study-container">
+    
+    <div class="study-title">🧠 Modo Estudio</div>
+    <div id="counter"></div>
 
-  <div id="studyCard" class="card" onclick="flip(this)" style="max-width:600px; margin:0 auto;">
-    <span class="front"></span>
-    <span class="back" style="display:none;"></span>
+    <div id="studyCard" class="card" onclick="flip(this)">
+      <span class="front"></span>
+      <span class="back" style="display:none;"></span>
+    </div>
+
+    <div class="study-buttons">
+      <button class="study-next" onclick="nextCard()">➡️ Siguiente</button>
+      <button class="study-shuffle" onclick="shuffleCards()">🔀 Mezclar</button>
+      <button class="study-exit" onclick="exitStudyMode()">❌ Salir</button>
+    </div>
+
   </div>
-
-  <div style="margin-top:15px;">
-  <button onclick="nextCard()" style="padding:10px 16px; margin:5px;">➡️ Siguiente</button>
-  <button onclick="shuffleCards()" style="padding:10px 16px; margin:5px;">🔀 Mezclar</button>
-  <button onclick="exitStudyMode()" style="padding:10px 16px; margin:5px;">❌ Salir</button>
 </div>
-</div>
+  
 
 <div style="text-align:center; margin:10px;">
   <button onclick="startStudyMode()" style="padding:10px 16px; background:#ff9800; color:#fff; border:none; border-radius:6px; font-weight:bold;">
@@ -813,14 +893,6 @@
 </section>
 
 <section id="saludmental">
-  <h2>Salud Mental</h2>
-  <div class="card" onclick="flip(this)">
-    <span class="front">💡 Técnica Pomodoro: pasos básicos.</span>
-    <span class="back">25 min estudio + 5 min pausa; repetir 4 veces y descanso largo.</span>
-  </div>
-</section>
-
-<section id="saludmental">
   <h2>Salud Mental <small>(10 tarjetas)</small></h2>
 
   <div class="card" onclick="flip(this)">
@@ -963,7 +1035,7 @@ function startStudyMode(){
   document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
 
   // Mostrar modo estudio
-  document.getElementById("studyMode").style.display = "block";
+  document.getElementById("studyMode").style.display = "flex";
 
   currentIndex = 0;
   showStudyCard();
