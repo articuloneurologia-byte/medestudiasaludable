@@ -70,9 +70,10 @@
   </div>
 
   <div style="margin-top:15px;">
-    <button onclick="nextCard()" style="padding:10px 16px; margin:5px;">➡️ Siguiente</button>
-    <button onclick="exitStudyMode()" style="padding:10px 16px; margin:5px;">❌ Salir</button>
-  </div>
+  <button onclick="nextCard()" style="padding:10px 16px; margin:5px;">➡️ Siguiente</button>
+  <button onclick="shuffleCards()" style="padding:10px 16px; margin:5px;">🔀 Mezclar</button>
+  <button onclick="exitStudyMode()" style="padding:10px 16px; margin:5px;">❌ Salir</button>
+</div>
 </div>
 
 <div style="text-align:center; margin:10px;">
@@ -944,12 +945,12 @@ document.getElementById("fraseMotivadora").textContent =
   frases[Math.floor(Math.random() * frases.length)];
 </script>
 
-  <script>
+<script>
 let allCards = [];
 let currentIndex = 0;
 
 function startStudyMode(){
-  // Recolectar todas las tarjetas del sitio
+  // Recolectar SOLO tarjetas con front y back (flashcards reales)
   allCards = Array.from(document.querySelectorAll(".card"))
     .filter(c => c.querySelector(".front") && c.querySelector(".back"));
 
@@ -997,9 +998,19 @@ function nextCard(){
   showStudyCard();
 }
 
+function shuffleCards(){
+  for(let i = allCards.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [allCards[i], allCards[j]] = [allCards[j], allCards[i]];
+  }
+  currentIndex = 0;
+  showStudyCard();
+}
+
 function exitStudyMode(){
   document.getElementById("studyMode").style.display = "none";
-  // Volver a mostrar la primera sección o dejar todo oculto
+  // Volver a una sección por defecto
+  showSection('pediatria');
 }
 </script>
 
