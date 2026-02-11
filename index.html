@@ -27,13 +27,11 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
   to {opacity:1; transform: translateY(0);}
 }
 
-/* ===== MODO ESTUDIO CENTRADO ===== */
-#studyMode{
+/* ===== MODO ESTUDIO / EXAMEN ===== */
+#studyMode, #examMode{
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: rgba(244,253,253,0.95);
   display: none;
   align-items: center;
@@ -61,13 +59,13 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
   color: #004d40;
 }
 
-#counter{
+#counter, #examCounter{
   margin: 10px 0;
   font-weight: bold;
   color: #00796b;
 }
 
-#studyCard{
+#studyCard, #examCard{
   flex: 1;
   display: flex;
   align-items: center;
@@ -78,11 +76,6 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
   border-radius: 14px;
   background: #f9ffff;
   box-shadow: inset 0 0 0 2px #e0f2f1;
-}
-
-#studyCard .front,
-#studyCard .back{
-  font-weight: 600;
 }
 
 .study-buttons{
@@ -101,6 +94,10 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
 .study-next{ background:#2196f3; color:white; }
 .study-shuffle{ background:#9e9e9e; color:white; }
 .study-exit{ background:#e53935; color:white; }
+
+/* Barra de progreso */
+#progressWrap{ width:100%; background:#e0f2f1; border-radius:10px; height:12px; overflow:hidden; margin:10px 0 20px; }
+#progressBar{ height:100%; width:0%; background:#00796b; transition:width 0.3s; }
 </style>
 </head>
 <body>
@@ -135,11 +132,25 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
   <button onclick="showSection('tecnicasEstudio')">Técnicas de Estudio</button>
 </nav>
 
+<!-- BOTONES DE MODOS -->
+<div style="text-align:center; margin:10px;">
+  <button onclick="startStudyMode()" style="padding:10px 16px; background:#ff9800; color:#fff; border:none; border-radius:6px; font-weight:bold;">
+    📖 Modo Estudio
+  </button>
+  <button onclick="startExamMode()" style="padding:10px 16px; background:#9c27b0; color:#fff; border:none; border-radius:6px; font-weight:bold; margin-left:10px;">
+    📝 Modo Examen
+  </button>
+</div>
+
+<!-- ===== MODO ESTUDIO ===== -->
 <div id="studyMode">
   <div class="study-container">
-    
     <div class="study-title">🧠 Modo Estudio</div>
     <div id="counter"></div>
+
+    <div id="progressWrap">
+      <div id="progressBar"></div>
+    </div>
 
     <div id="studyCard" class="card" onclick="flip(this)">
       <span class="front"></span>
@@ -151,15 +162,25 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
       <button class="study-shuffle" onclick="shuffleCards()">🔀 Mezclar</button>
       <button class="study-exit" onclick="exitStudyMode()">❌ Salir</button>
     </div>
-
   </div>
 </div>
-  
 
-<div style="text-align:center; margin:10px;">
-  <button onclick="startStudyMode()" style="padding:10px 16px; background:#ff9800; color:#fff; border:none; border-radius:6px; font-weight:bold;">
-    📖 Modo Estudio
-  </button>
+<!-- ===== MODO EXAMEN ===== -->
+<div id="examMode">
+  <div class="study-container">
+    <div class="study-title">📝 Modo Examen</div>
+    <div id="examCounter"></div>
+
+    <div id="examCard" class="card" onclick="flip(this)">
+      <span class="front"></span>
+      <span class="back" style="display:none;"></span>
+    </div>
+
+    <div class="study-buttons">
+      <button class="study-next" onclick="nextExamCard()">➡️ Siguiente</button>
+      <button class="study-exit" onclick="exitExamMode()">❌ Salir</button>
+    </div>
+  </div>
 </div>
   
 <section id="tecnicasEstudio">
@@ -954,10 +975,6 @@ footer{background:#004d40;color:#fff;text-align:center;padding:10px}
   </a>
 </footer>
 
-<button id="topBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
-style="position:fixed;bottom:20px;right:20px;padding:10px 14px;border:none;border-radius:50%;
-background:#00796b;color:white;font-size:18px;cursor:pointer;display:none;">⬆️</button>
-
 <script>
 function showSection(id){
   document.querySelectorAll('section').forEach(sec=> sec.style.display='none');
@@ -975,10 +992,7 @@ function flip(card){
   }
 }
 
-window.addEventListener("scroll", ()=>{
-  document.getElementById("topBtn").style.display = window.scrollY > 200 ? "block" : "none";
-});
-
+/* FRASES */
 const frases = [
   "🌱 Estudiar sin salud mental es rendirse a largo plazo.",
   "🧘 Respira, lo estás haciendo bien.",
@@ -1012,17 +1026,14 @@ const frases = [
   "🧗 Paso a paso también es llegar.",
   "🚀 Sigue: ya estás más lejos de lo que crees."
 ];
-
 document.getElementById("fraseMotivadora").textContent =
   frases[Math.floor(Math.random() * frases.length)];
-</script>
 
-<script>
+/* ===== MODO ESTUDIO ===== */
 let allCards = [];
 let currentIndex = 0;
 
 function startStudyMode(){
-  // Recolectar SOLO tarjetas con front y back (flashcards reales)
   allCards = Array.from(document.querySelectorAll(".card"))
     .filter(c => c.querySelector(".front") && c.querySelector(".back"));
 
@@ -1031,12 +1042,8 @@ function startStudyMode(){
     return;
   }
 
-  // Ocultar secciones normales
   document.querySelectorAll("section").forEach(sec => sec.style.display = "none");
-
-  // Mostrar modo estudio
   document.getElementById("studyMode").style.display = "flex";
-
   currentIndex = 0;
   showStudyCard();
 }
@@ -1047,8 +1054,6 @@ function showStudyCard(){
   const backText  = card.querySelector(".back").innerHTML;
 
   const studyCard = document.getElementById("studyCard");
-  studyCard.classList.remove("flip");
-
   const front = studyCard.querySelector(".front");
   const back  = studyCard.querySelector(".back");
 
@@ -1057,15 +1062,17 @@ function showStudyCard(){
   back.style.display = "none";
   front.style.display = "block";
 
-  // Actualizar contador
   document.getElementById("counter").textContent =
     "Tarjeta " + (currentIndex + 1) + " de " + allCards.length;
+
+  const percent = ((currentIndex + 1) / allCards.length) * 100;
+  document.getElementById("progressBar").style.width = percent + "%";
 }
 
 function nextCard(){
   currentIndex++;
   if(currentIndex >= allCards.length){
-    currentIndex = 0; // vuelve al inicio
+    currentIndex = 0;
   }
   showStudyCard();
 }
@@ -1081,8 +1088,61 @@ function shuffleCards(){
 
 function exitStudyMode(){
   document.getElementById("studyMode").style.display = "none";
-  // Volver a una sección por defecto
   showSection('pediatria');
+}
+
+/* ===== MODO EXAMEN ===== */
+let examCards = [];
+let examIndex = 0;
+let examTotal = 20;
+
+function startExamMode(){
+  let all = Array.from(document.querySelectorAll(".card"))
+    .filter(c => c.querySelector(".front") && c.querySelector(".back"));
+
+  if(all.length < 1){
+    alert("No hay suficientes tarjetas para el examen.");
+    return;
+  }
+
+  all.sort(() => Math.random() - 0.5);
+  examCards = all.slice(0, Math.min(examTotal, all.length));
+  examIndex = 0;
+
+  document.getElementById("examMode").style.display = "flex";
+  showExamCard();
+}
+
+function showExamCard(){
+  const card = examCards[examIndex];
+  const frontText = card.querySelector(".front").innerHTML;
+  const backText  = card.querySelector(".back").innerHTML;
+
+  const examCard = document.getElementById("examCard");
+  const front = examCard.querySelector(".front");
+  const back  = examCard.querySelector(".back");
+
+  front.innerHTML = frontText;
+  back.innerHTML = backText;
+  back.style.display = "none";
+  front.style.display = "block";
+
+  document.getElementById("examCounter").textContent =
+    "Pregunta " + (examIndex + 1) + " de " + examCards.length;
+}
+
+function nextExamCard(){
+  examIndex++;
+  if(examIndex >= examCards.length){
+    alert("✅ Examen terminado. ¡Buen trabajo!");
+    exitExamMode();
+    return;
+  }
+  showExamCard();
+}
+
+function exitExamMode(){
+  document.getElementById("examMode").style.display = "none";
 }
 </script>
 
